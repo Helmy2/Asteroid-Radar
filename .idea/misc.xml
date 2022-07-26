@@ -3,8 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/layout/asteroid_item.xml" value="0.165" />
         <entry key="app/src/main/res/layout/fragment_detail.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/fragment_main.xml" value="0.10833333333333334" />
+        <entry key="app/src/main/res/layout/fragment_main.xml" value="0.1" />
       </map>
     </option>
   </component>

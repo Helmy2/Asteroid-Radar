@@ -1,6 +1,8 @@
 package com.example.asteroidradar
 
+import android.view.View
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 
@@ -38,4 +40,9 @@ fun bindTextViewToKmUnit(textView: TextView, number: Double) {
 fun bindTextViewToDisplayVelocity(textView: TextView, number: Double) {
     val context = textView.context
     textView.text = String.format(context.getString(R.string.km_s_unit_format), number)
+}
+
+@BindingAdapter("isVisible")
+fun ProgressBar.showProgressBar(isVisible: Boolean) {
+    visibility = if (isVisible) View.VISIBLE else View.GONE
 }

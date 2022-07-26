@@ -20,6 +20,13 @@ class MainFragment : Fragment() {
         val binding = FragmentMainBinding.inflate(inflater)
         binding.lifecycleOwner = this
 
+        val adapter = AsteroidListAdapter()
+        binding.asteroidRecycler.adapter = adapter
+
+        viewModel.asteroidList.observe(viewLifecycleOwner){
+            adapter.submitList(it)
+        }
+
         binding.viewModel = viewModel
 
         return binding.root
