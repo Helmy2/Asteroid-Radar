@@ -1,27 +1,25 @@
 package com.example.asteroidradar.main
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import android.app.Application
+import androidx.lifecycle.*
 import com.example.asteroidradar.Asteroid
 import com.example.asteroidradar.AsteroidRepository
+import com.example.asteroidradar.database.getDatabase
 import kotlinx.coroutines.launch
 
-class MainViewModel : ViewModel() {
-    private val _asteroidList: MutableLiveData<List<Asteroid>> = MutableLiveData()
-    val asteroidList: LiveData<List<Asteroid>>
-        get() = _asteroidList
+class MainViewModel(application: Application) : AndroidViewModel(application) {
+    private val database = getDatabase(application)
+    private val asteroidRepository = AsteroidRepository(database)
+
+    val asteroidList: LiveData<List<Asteroid>> = asteroidRepository.asteroidList
 
     private val _isLoading: MutableLiveData<Boolean> = MutableLiveData(true)
     val isLoading: LiveData<Boolean>
         get() = _isLoading
 
     init {
-        val asteroidRepository = AsteroidRepository()
         viewModelScope.launch {
             asteroidRepository.refreshFeed()
-            _asteroidList.value = asteroidRepository.asteroidList.value
             _isLoading.value = false
         }
     }
