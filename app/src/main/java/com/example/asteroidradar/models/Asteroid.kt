@@ -1,4 +1,4 @@
-package com.example.asteroidradar
+package com.example.asteroidradar.models
 
 import android.os.Parcelable
 import com.example.asteroidradar.database.DatabaseAsteroid

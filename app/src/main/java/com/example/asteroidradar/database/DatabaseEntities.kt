@@ -3,7 +3,7 @@ package com.example.asteroidradar.database
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.asteroidradar.Asteroid
+import com.example.asteroidradar.models.Asteroid
 
 @Entity
 data class DatabaseAsteroid(

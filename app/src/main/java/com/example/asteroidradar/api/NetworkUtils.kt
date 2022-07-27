@@ -1,7 +1,7 @@
 package com.example.asteroidradar.api
 
-import com.example.asteroidradar.Asteroid
-import com.example.asteroidradar.Constants
+import com.example.asteroidradar.models.Asteroid
+import com.example.asteroidradar.util.Constants
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*

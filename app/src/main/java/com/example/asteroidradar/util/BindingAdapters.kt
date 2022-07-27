@@ -1,10 +1,15 @@
-package com.example.asteroidradar
+package com.example.asteroidradar.util
 
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatDrawableManager.get
 import androidx.databinding.BindingAdapter
+import com.example.asteroidradar.R
+import com.example.asteroidradar.models.PictureOfDay
+import com.squareup.picasso.Picasso
+import java.lang.reflect.Array.get
 
 @BindingAdapter("statusIcon")
 fun bindAsteroidStatusImage(imageView: ImageView, isHazardous: Boolean) {
@@ -45,4 +50,14 @@ fun bindTextViewToDisplayVelocity(textView: TextView, number: Double) {
 @BindingAdapter("isVisible")
 fun ProgressBar.showProgressBar(isVisible: Boolean) {
     visibility = if (isVisible) View.VISIBLE else View.GONE
+}
+
+@BindingAdapter("pictureResponse")
+fun ImageView.loadImage(picture: PictureOfDay?) {
+    if (picture?.mediaType == "image") {
+        val picasso = Picasso.Builder(context).build()
+        picasso.load(picture.url)
+            .placeholder(R.drawable.placeholder_picture_of_day)
+            .into(this)
+    }
 }

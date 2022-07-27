@@ -3,9 +3,17 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1305" />
+        <entry key="app/src/main/res/drawable/ic_help_circle.xml" value="0.1305" />
+        <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.1305" />
+        <entry key="app/src/main/res/drawable/ic_status_normal.xml" value="0.1305" />
+        <entry key="app/src/main/res/drawable/ic_status_potentially_hazardous.xml" value="0.1305" />
+        <entry key="app/src/main/res/drawable/placeholder_picture_of_day.xml" value="0.1315" />
+        <entry key="app/src/main/res/drawable/progress_animation.xml" value="0.1315" />
         <entry key="app/src/main/res/layout/asteroid_item.xml" value="0.165" />
-        <entry key="app/src/main/res/layout/fragment_detail.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_detail.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_main.xml" value="0.1" />
+        <entry key="app/src/main/res/menu/main_overflow_menu.xml" value="0.10555555555555556" />
       </map>
     </option>
   </component>
