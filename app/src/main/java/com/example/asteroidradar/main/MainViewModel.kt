@@ -30,11 +30,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     init {
         viewModelScope.launch {
+            asteroidRepository.updateFeed()
             pictureOfDay.value = asteroidRepository.getPictureOfDay()
             asteroidList.value =
                 asteroidRepository.getAsteroidList(AsteroidDateFilter.ViewSaved)
             _isLoading.value = false
-            asteroidRepository.updateFeed()
         }
     }
 

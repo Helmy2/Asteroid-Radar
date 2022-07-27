@@ -12,7 +12,7 @@ import retrofit2.http.GET
 
 interface AsteroidService {
     @GET("neo/rest/v1/feed?api_key=${Constants.API_KEY}")
-    suspend fun getFeed(): String
+    suspend fun getFeed(startDate: String, endDate: String): String
 
     @GET("planetary/apod?api_key=${Constants.API_KEY}")
     suspend fun getPictureOfDay(): PictureOfDay
@@ -25,8 +25,8 @@ private val moshi = Moshi.Builder()
 object Network {
     private val retrofit = Retrofit.Builder()
         .baseUrl(Constants.BASE_URL)
-        .addConverterFactory(MoshiConverterFactory.create(moshi))
         .addConverterFactory(ScalarsConverterFactory.create())
+        .addConverterFactory(MoshiConverterFactory.create(moshi))
         .addCallAdapterFactory(CoroutineCallAdapterFactory())
         .build()
 

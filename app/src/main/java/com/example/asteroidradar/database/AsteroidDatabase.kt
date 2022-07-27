@@ -10,6 +10,7 @@ abstract class AsteroidDatabase : RoomDatabase() {
     abstract val asteroidDao: AsteroidDao
 }
 
+@Volatile
 private lateinit var INSTANCE: AsteroidDatabase
 
 fun getDatabase(context: Context): AsteroidDatabase {
