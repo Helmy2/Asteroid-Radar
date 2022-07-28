@@ -1,4 +1,4 @@
-package com.example.asteroidradar.main
+package com.example.asteroidradar.ui.main
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

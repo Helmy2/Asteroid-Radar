@@ -1,10 +1,7 @@
 package com.example.asteroidradar.database
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.example.asteroidradar.util.AsteroidDateFilter
 
 @Dao
@@ -17,4 +14,7 @@ interface AsteroidDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(vararg asteroids: DatabaseAsteroid)
+
+    @Query("Delete FROM DatabaseAsteroid WHERE close_approach_date = :date")
+    suspend fun deleteAsteroids(date:String)
 }

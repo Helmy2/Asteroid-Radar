@@ -1,7 +1,8 @@
-package com.example.asteroidradar.main
+package com.example.asteroidradar.ui.main
 
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -13,12 +14,12 @@ import com.example.asteroidradar.util.AsteroidDateFilter
 class MainFragment : Fragment() {
 
     private val viewModel: MainViewModel by viewModels()
-
+    private lateinit var binding: FragmentMainBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentMainBinding.inflate(inflater)
+        binding = FragmentMainBinding.inflate(inflater)
         binding.lifecycleOwner = this
 
         val adapter = AsteroidListAdapter(
@@ -53,6 +54,9 @@ class MainFragment : Fragment() {
                 viewModel.filterAsteroidList(filter)
             }, viewLifecycleOwner
         )
+        viewModel.errorMassage.observe(viewLifecycleOwner){
+            Toast.makeText(requireContext(), it.toString(), Toast.LENGTH_LONG).show()
+        }
     }
 
 }

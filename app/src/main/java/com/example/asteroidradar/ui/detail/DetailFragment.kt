@@ -1,4 +1,4 @@
-package com.example.asteroidradar.detail
+package com.example.asteroidradar.ui.detail
 
 
 import android.os.Bundle

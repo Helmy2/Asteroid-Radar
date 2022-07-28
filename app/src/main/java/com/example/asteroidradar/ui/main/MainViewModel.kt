@@ -1,14 +1,14 @@
-package com.example.asteroidradar.main
+package com.example.asteroidradar.ui.main
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.asteroidradar.AsteroidRepository
 import com.example.asteroidradar.database.getDatabase
 import com.example.asteroidradar.models.Asteroid
 import com.example.asteroidradar.models.PictureOfDay
+import com.example.asteroidradar.repository.AsteroidRepository
 import com.example.asteroidradar.util.AsteroidDateFilter
 import kotlinx.coroutines.launch
 
@@ -21,6 +21,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val asteroidList: MutableLiveData<List<Asteroid>> =
         MutableLiveData(emptyList())
 
+    val errorMassage = asteroidRepository.error
+
     private val _isLoading: MutableLiveData<Boolean> = MutableLiveData(true)
     val isLoading: LiveData<Boolean>
         get() = _isLoading
@@ -30,7 +32,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     init {
         viewModelScope.launch {
-            asteroidRepository.updateFeed()
+//            asteroidRepository.updateFeed()
             pictureOfDay.value = asteroidRepository.getPictureOfDay()
             asteroidList.value =
                 asteroidRepository.getAsteroidList(AsteroidDateFilter.ViewSaved)

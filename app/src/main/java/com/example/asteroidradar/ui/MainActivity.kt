@@ -1,8 +1,8 @@
-package com.example.asteroidradar
+package com.example.asteroidradar.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.squareup.picasso.Picasso
+import com.example.asteroidradar.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

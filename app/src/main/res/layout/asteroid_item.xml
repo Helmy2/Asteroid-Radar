@@ -10,7 +10,7 @@
 
         <variable
             name="listener"
-            type="com.example.asteroidradar.main.AsteroidListener" />
+            type="com.example.asteroidradar.ui.main.AsteroidListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
