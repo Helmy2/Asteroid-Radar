@@ -42,12 +42,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         MutableLiveData()
 
     init {
-        filterAsteroidList(AsteroidDateFilter.ViewSaved)
         viewModelScope.launch {
             _isLoading.value = true
+            updateFeed()
             updatePictureOfDay()
             _isLoading.value = false
         }
+        filterAsteroidList(AsteroidDateFilter.ViewSaved)
     }
 
     fun updateAll() {
