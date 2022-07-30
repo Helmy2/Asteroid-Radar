@@ -1,10 +1,29 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
+    ext {
+        moshi_version = '2.9.0'
+        constraintlayout_version = '2.1.4'
+        core_ktx_version = '1.8.0'
+        converter_scalars_sersion = '2.9.0'
+        fragment_ktx_version = '1.5.1'
+        lifecycle_livedata_version = '2.5.0'
+        lifecycle_viewmodel_version = '2.5.1'
+        material_version = '1.6.1'
+        moshi__version = '1.13.0'
+        room_version = '2.5.0-alpha02'
+        kotlinx_coroutines_version = '1.6.4'
+        navigation_version = '2.5.1'
+        swiperefreshlayout_version = '1.1.0'
+        work_version  = '2.7.1'
+        recyclerview_version  = '1.2.1'
+        picasso_version  = '2.71828'
+    }
+
     repositories {
         google()
     }
     dependencies {
-        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.5.0"
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.5.1"
     }
 }
 

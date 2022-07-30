@@ -24,7 +24,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:srcCompat="@drawable/asteroid_safe"
-            android:contentDescription="@string/image_of_the_day"/>
+           />
 
         <ScrollView
             android:layout_width="0dp"
