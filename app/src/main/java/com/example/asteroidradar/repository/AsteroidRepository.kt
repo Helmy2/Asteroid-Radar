@@ -12,6 +12,7 @@ import com.example.asteroidradar.models.asDatabaseAsteroid
 import com.example.asteroidradar.util.AsteroidDateFilter
 import com.example.asteroidradar.util.Constants
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.time.LocalDateTime
@@ -22,8 +23,6 @@ private const val TAG = "AsteroidRepository"
 class AsteroidRepository(
     private val database: AsteroidDatabase
 ) {
-    val error: MutableLiveData<String> = MutableLiveData()
-
     suspend fun getAsteroidList(filter: AsteroidDateFilter): List<Asteroid>? =
         when (filter) {
             AsteroidDateFilter.ViewSaved ->
@@ -41,7 +40,6 @@ class AsteroidRepository(
                 database.asteroidDao.getAsteroid()?.asDomainAsteroid()
             } catch (e: Exception) {
                 Log.i(TAG, "getSavedAsteroid: $e")
-                error.value = e.message
                 null
             }
         }
@@ -56,7 +54,6 @@ class AsteroidRepository(
                 )?.asDomainAsteroid()
             } catch (e: Exception) {
                 Log.i(TAG, "getTodayAsteroid: $e")
-                error.value = e.message
                 null
             }
         }
@@ -71,7 +68,6 @@ class AsteroidRepository(
                 )?.asDomainAsteroid()
             } catch (e: Exception) {
                 Log.i(TAG, "getWeekAsteroids: $e")
-                error.value = e.message
                 null
             }
         }
@@ -94,7 +90,6 @@ class AsteroidRepository(
                 return@withContext true
             } catch (e: Exception) {
                 Log.i(TAG, "updateFeed: $e")
-                error.value = e.message
                 return@withContext false
             }
         }
@@ -111,7 +106,6 @@ class AsteroidRepository(
         Network.service.getPictureOfDay()
     } catch (e: Exception) {
         Log.i(TAG, "getPictureOfDay: $e")
-        error.value = e.message
         null
     }
 

@@ -54,11 +54,16 @@ class MainFragment : Fragment() {
                 viewModel.filterAsteroidList(filter)
             }, viewLifecycleOwner
         )
+        binding.swipeRefresh.setOnRefreshListener{
+            viewModel.updateFeed()
+        }
+
         viewModel.errorMassage.observe(viewLifecycleOwner){
-            Toast.makeText(requireContext(), it.toString(), Toast.LENGTH_LONG).show()
+            it?.let {
+                Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+            }
         }
     }
-
 }
 
 class MainMenuProvider(val onItemClicked: (menuItem: MenuItem) -> Unit) : MenuProvider {

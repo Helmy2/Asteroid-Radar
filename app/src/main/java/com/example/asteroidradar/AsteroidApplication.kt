@@ -24,8 +24,8 @@ class AsteroidApplication : Application() {
 
     private fun setupWork() {
         val constraints = Constraints.Builder()
-//            .setRequiredNetworkType(NetworkType.METERED)
-//            .setRequiresCharging(true)
+            .setRequiredNetworkType(NetworkType.METERED)
+            .setRequiresCharging(true)
             .build()
 
         val repeatingRequest = PeriodicWorkRequestBuilder<RefreshDataWorker>(1, TimeUnit.DAYS)

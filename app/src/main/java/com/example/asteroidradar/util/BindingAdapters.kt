@@ -6,6 +6,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatDrawableManager.get
 import androidx.databinding.BindingAdapter
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.asteroidradar.R
 import com.example.asteroidradar.models.PictureOfDay
 import com.squareup.picasso.Picasso
@@ -60,4 +61,9 @@ fun ImageView.loadImage(picture: PictureOfDay?) {
             .placeholder(R.drawable.placeholder_picture_of_day)
             .into(this)
     }
+}
+
+@BindingAdapter("isRefreshing")
+fun SwipeRefreshLayout.isRefreshing(value: Boolean) {
+    isRefreshing = value
 }
