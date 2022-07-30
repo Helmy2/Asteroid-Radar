@@ -1,7 +1,6 @@
 package com.example.asteroidradar.repository
 
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
 import com.example.asteroidradar.api.Network
 import com.example.asteroidradar.api.parseAsteroidsJsonResult
 import com.example.asteroidradar.database.AsteroidDatabase
@@ -11,8 +10,8 @@ import com.example.asteroidradar.models.PictureOfDay
 import com.example.asteroidradar.models.asDatabaseAsteroid
 import com.example.asteroidradar.util.AsteroidDateFilter
 import com.example.asteroidradar.util.Constants
+import com.example.asteroidradar.util.Response
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.time.LocalDateTime
@@ -23,7 +22,7 @@ private const val TAG = "AsteroidRepository"
 class AsteroidRepository(
     private val database: AsteroidDatabase
 ) {
-    suspend fun getAsteroidList(filter: AsteroidDateFilter): List<Asteroid>? =
+    suspend fun getAsteroidList(filter: AsteroidDateFilter): Response<List<Asteroid>> =
         when (filter) {
             AsteroidDateFilter.ViewSaved ->
                 getSavedAsteroid()
@@ -34,51 +33,53 @@ class AsteroidRepository(
         }
 
 
-    private suspend fun getSavedAsteroid(): List<Asteroid>? {
+    private suspend fun getSavedAsteroid(): Response<List<Asteroid>> {
         return withContext(Dispatchers.IO) {
             try {
-                database.asteroidDao.getAsteroid()?.asDomainAsteroid()
+                val data = database.asteroidDao.getAsteroid().asDomainAsteroid()
+                Response.Success(data)
             } catch (e: Exception) {
                 Log.i(TAG, "getSavedAsteroid: $e")
-                null
+                Response.Error(e)
             }
         }
     }
 
-    private suspend fun getTodayAsteroid(): List<Asteroid>? {
+    private suspend fun getTodayAsteroid(): Response<List<Asteroid>> {
         return withContext(Dispatchers.IO) {
             val today = formatDay(LocalDateTime.now())
             try {
-                database.asteroidDao.getAsteroid(
+                val data = database.asteroidDao.getAsteroid(
                     listOf(today)
-                )?.asDomainAsteroid()
+                ).asDomainAsteroid()
+                Response.Success(data)
             } catch (e: Exception) {
                 Log.i(TAG, "getTodayAsteroid: $e")
-                null
+                Response.Error(e)
             }
         }
     }
 
-    private suspend fun getWeekAsteroids(): List<Asteroid>? {
+    private suspend fun getWeekAsteroids(): Response<List<Asteroid>> {
         return withContext(Dispatchers.IO) {
             val sevenDay = getSevenDayFromNawFormatted()
             try {
-                database.asteroidDao.getAsteroid(
+                val data = database.asteroidDao.getAsteroid(
                     sevenDay
-                )?.asDomainAsteroid()
+                ).asDomainAsteroid()
+                Response.Success(data)
             } catch (e: Exception) {
                 Log.i(TAG, "getWeekAsteroids: $e")
-                null
+                Response.Error(e)
             }
         }
     }
 
-    suspend fun updateFeed(): Boolean {
+    suspend fun updateFeed(): Response<List<Asteroid>> {
         return withContext(Dispatchers.IO) {
+            val startDate = formatDay(LocalDateTime.now())
+            val endDate = formatDay(LocalDateTime.now().plusDays(7))
             try {
-                val startDate = formatDay(LocalDateTime.now())
-                val endDate = formatDay(LocalDateTime.now().plusDays(7))
-
                 val feed = Network.service.getFeed(startDate, endDate)
 
                 val jsonObject = JSONObject(feed)
@@ -87,13 +88,15 @@ class AsteroidRepository(
                 database.asteroidDao.insertAll(
                     *list.asDatabaseAsteroid()
                 )
-                return@withContext true
+
+                getSavedAsteroid()
             } catch (e: Exception) {
-                Log.i(TAG, "updateFeed: $e")
-                return@withContext false
+                Log.i(TAG, "updateAll: $e")
+                Response.Error(e)
             }
         }
     }
+
 
     suspend fun deleteLastDayDate() {
         withContext(Dispatchers.IO) {
@@ -102,11 +105,11 @@ class AsteroidRepository(
         }
     }
 
-    suspend fun getPictureOfDay(): PictureOfDay? = try {
-        Network.service.getPictureOfDay()
+    suspend fun getPictureOfDay(): Response<PictureOfDay> = try {
+        val data = Network.service.getPictureOfDay()
+        Response.Success(data)
     } catch (e: Exception) {
-        Log.i(TAG, "getPictureOfDay: $e")
-        null
+        Response.Error(e)
     }
 
     private fun getSevenDayFromNawFormatted(): MutableList<String> {

@@ -6,10 +6,14 @@ import android.widget.Toast
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.asteroidradar.R
 import com.example.asteroidradar.databinding.FragmentMainBinding
 import com.example.asteroidradar.util.AsteroidDateFilter
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 class MainFragment : Fragment() {
 
@@ -54,13 +58,13 @@ class MainFragment : Fragment() {
                 viewModel.filterAsteroidList(filter)
             }, viewLifecycleOwner
         )
-        binding.swipeRefresh.setOnRefreshListener{
-            viewModel.updateFeed()
+        binding.swipeRefresh.setOnRefreshListener {
+            viewModel.updateAll()
         }
 
-        viewModel.errorMassage.observe(viewLifecycleOwner){
-            it?.let {
-                Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+        lifecycleScope.launch {
+            viewModel.errorFlow.collect {
+                    Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
             }
         }
     }

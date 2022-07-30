@@ -11,19 +11,24 @@ import com.example.asteroidradar.models.Asteroid
 import com.example.asteroidradar.models.PictureOfDay
 import com.example.asteroidradar.repository.AsteroidRepository
 import com.example.asteroidradar.util.AsteroidDateFilter
+import com.example.asteroidradar.util.Response
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import kotlin.reflect.jvm.internal.impl.load.kotlin.PackagePartProvider
 
 private const val TAG = "MainViewModel"
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val database = getDatabase(application)
     private val asteroidRepository = AsteroidRepository(database)
+    private val eventChannel = Channel<String>()
 
-    val asteroidList: MutableLiveData<List<Asteroid>> =
-        MutableLiveData(emptyList())
+    var errorFlow = eventChannel.receiveAsFlow()
+        private set
 
-    val errorMassage = MutableLiveData<String>()
+    private val _asteroidList: MutableLiveData<List<Asteroid>> = MutableLiveData(emptyList())
+    val asteroidList: LiveData<List<Asteroid>>
+        get() = _asteroidList
 
     private val _isLoading: MutableLiveData<Boolean> = MutableLiveData(true)
     val isLoading: LiveData<Boolean>
@@ -33,33 +38,56 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val isSwipeRefreshLoading: LiveData<Boolean>
         get() = _isSwipeRefreshLoading
 
-    val pictureOfDay: MutableLiveData<PictureOfDay?> =
+    val pictureOfDay: MutableLiveData<PictureOfDay> =
         MutableLiveData()
 
     init {
+        filterAsteroidList(AsteroidDateFilter.ViewSaved)
         viewModelScope.launch {
-            pictureOfDay.value = asteroidRepository.getPictureOfDay()
-            asteroidList.value =
-                asteroidRepository.getAsteroidList(AsteroidDateFilter.ViewSaved)
+            _isLoading.value = true
+            updatePictureOfDay()
             _isLoading.value = false
+        }
+    }
+
+    fun updateAll() {
+        viewModelScope.launch {
+            _isSwipeRefreshLoading.value = true
+            updatePictureOfDay()
+            updateFeed()
+            _isSwipeRefreshLoading.value = false
         }
     }
 
     fun filterAsteroidList(filter: AsteroidDateFilter) {
         viewModelScope.launch {
-            asteroidList.value =
-                asteroidRepository.getAsteroidList(filter)
+            val response = asteroidRepository.getAsteroidList(filter)
+            if (response is Response.Success)
+                _asteroidList.value = response.data
+            else {
+                Log.i(TAG, "filterAsteroidList: ${response.error?.localizedMessage}")
+                eventChannel.send(response.error?.localizedMessage ?: "")
+            }
         }
     }
 
-    fun updateFeed() {
-        viewModelScope.launch {
-            _isSwipeRefreshLoading.value = true
-            asteroidRepository.updateFeed()
-            pictureOfDay.value = asteroidRepository.getPictureOfDay()
-            asteroidList.value =
-                asteroidRepository.getAsteroidList(AsteroidDateFilter.ViewSaved)
-            _isSwipeRefreshLoading.value = false
+    private suspend fun updateFeed() {
+        val response = asteroidRepository.updateFeed()
+        if (response is Response.Success)
+            _asteroidList.value = response.data
+        else {
+            Log.i(TAG, "updateAll: ${response.error?.message}")
+            eventChannel.send(response.error?.localizedMessage ?: "")
+        }
+    }
+
+    private suspend fun updatePictureOfDay() {
+        val response = asteroidRepository.getPictureOfDay()
+        if (response is Response.Success)
+            pictureOfDay.value = response.data
+        else {
+            Log.i(TAG, "updatePictureOfDay: ${response.error?.message}")
+            eventChannel.send(response.error?.localizedMessage ?: "")
         }
     }
 }
