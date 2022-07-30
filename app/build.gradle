@@ -6,6 +6,10 @@ plugins {
     id 'kotlin-parcelize'
 }
 
+ext {
+    API_KEY = '0t6lViUunAerh4oQaLW9tZXXGwYOMclN8xqf8iWS'
+}
+
 android {
     compileSdk 32
 
